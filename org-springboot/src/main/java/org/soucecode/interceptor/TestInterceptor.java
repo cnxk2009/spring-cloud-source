@@ -1,4 +1,4 @@
-package soucecode.interceptor;
+package org.soucecode.interceptor;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
