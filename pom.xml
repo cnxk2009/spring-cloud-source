@@ -8,44 +8,20 @@
         <version>2.0.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.springcloud.source</groupId>
-    <artifactId>org-springcloud-source</artifactId>
+    <groupId>org.spring-cloud.source</groupId>
+    <artifactId>org-spring-cloud-source</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>org-springcloud-source</name>
+    <name>org-spring-cloud-source</name>
     <description>Spring Cloud Source</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>3.3.1-2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+	<modules>
+	    <module>spring-cloud-eureka-source</module>
+    </modules>
+    <packaging>pom</packaging>
+     
 
     <build>
         <plugins>
