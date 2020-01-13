@@ -108,12 +108,13 @@ public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter {
         return HasFeatures.namedFeature("Eureka Server",
                 EurekaServerAutoConfiguration.class);
     }
-
+    //初始化配置
     @Configuration
     protected static class EurekaServerConfigBeanConfiguration {
         @Bean
         @ConditionalOnMissingBean
         public EurekaServerConfig eurekaServerConfig(EurekaClientConfig clientConfig) {
+            //Eureka配置属性Bean
             EurekaServerConfigBean server = new EurekaServerConfigBean();
             if (clientConfig.shouldRegisterWithEureka()) {
                 // Set a sensible default if we are supposed to replicate
@@ -160,7 +161,7 @@ public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter {
                     CodecWrappers.getCodec(CodecWrappers.JacksonXmlMini.class));
         }
     }
-    //初始化集群注册表
+    //初始化集群 注册表 信息对象
     @Bean
     public PeerAwareInstanceRegistry peerAwareInstanceRegistry(
             ServerCodecs serverCodecs) {
@@ -240,7 +241,7 @@ public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter {
             return false;
         }
     }
-
+    // EurekaServer的上下文
     @Bean
     public EurekaServerContext eurekaServerContext(ServerCodecs serverCodecs,
                                                    PeerAwareInstanceRegistry registry, PeerEurekaNodes peerEurekaNodes) {
@@ -248,6 +249,13 @@ public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter {
                 registry, peerEurekaNodes, this.applicationInfoManager);
     }
 
+    /**
+     * 核心类
+     * 这个类的作用是spring-cloud和原生eureka的胶水代码，通过这个类来启动EurekaSever
+     * 后面这个类会在EurekaServerInitializerConfiguration被调用，进行eureka启动
+     * 参数相当于 @AutoWired PeerAwareInstanceRegistry registry
+     *          @AutoWired EurekaServerContext serverContext
+     */
     @Bean
     public EurekaServerBootstrap eurekaServerBootstrap(PeerAwareInstanceRegistry registry,
                                                        EurekaServerContext serverContext) {
@@ -258,6 +266,7 @@ public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter {
 
     /**
      * Register the Jersey filter
+     * 配置拦截器，ServletContainer里面实现了jersey框架，通过他来实现eurekaServer对外的restFull接口
      */
     @Bean
     public FilterRegistrationBean jerseyFilterRegistration(
