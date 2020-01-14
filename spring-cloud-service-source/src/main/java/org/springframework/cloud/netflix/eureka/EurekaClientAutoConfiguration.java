@@ -207,6 +207,9 @@ public class EurekaClientAutoConfiguration {
         }
     }
 
+    /**
+     * 注入EurekaClient Bean 说明此Bean 有初始化,Ctrl +K 找到 EurekaClient Bean初始化的地方
+     */
     @Bean
     public DiscoveryClient discoveryClient(EurekaInstanceConfig config, EurekaClient client) {
         return new EurekaDiscoveryClient(config, client);

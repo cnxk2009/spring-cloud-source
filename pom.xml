@@ -20,6 +20,7 @@
 	<modules>
 	    <module>spring-cloud-eureka-source</module>
         <module>spring-cloud-service-source</module>
+        <module>org-spring-cloud-ribbon-source</module>
     </modules>
     <packaging>pom</packaging>
 
