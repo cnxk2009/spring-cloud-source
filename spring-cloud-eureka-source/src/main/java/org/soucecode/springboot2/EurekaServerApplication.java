@@ -28,6 +28,7 @@ public class EurekaServerApplication extends SpringBootServletInitializer {
      * @param ctx
      * @return
      */
+
 /*    @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
