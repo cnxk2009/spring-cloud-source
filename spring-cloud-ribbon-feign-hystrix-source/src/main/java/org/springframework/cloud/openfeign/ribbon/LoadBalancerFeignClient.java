@@ -49,13 +49,14 @@ public class LoadBalancerFeignClient implements Client {
         this.lbClientFactory = lbClientFactory;
         this.clientFactory = clientFactory;
     }
-
+    //调用服务一个请求方法
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
         try {
             URI asUri = URI.create(request.url());
             String clientName = asUri.getHost();
             URI uriWithoutHost = cleanUrl(request.url(), clientName);
+            //整合Ribbon负载均衡
             FeignLoadBalancer.RibbonRequest ribbonRequest = new FeignLoadBalancer.RibbonRequest(
                     this.delegate, request, uriWithoutHost);
 
