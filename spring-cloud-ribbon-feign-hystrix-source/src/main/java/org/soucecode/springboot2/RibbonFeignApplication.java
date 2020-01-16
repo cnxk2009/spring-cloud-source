@@ -27,4 +27,6 @@ public class RibbonFeignApplication extends SpringBootServletInitializer {
 
     @Override protected SpringApplicationBuilder configure(SpringApplicationBuilder application) { return application.sources(RibbonFeignApplication.class); }
 
+
+
 }

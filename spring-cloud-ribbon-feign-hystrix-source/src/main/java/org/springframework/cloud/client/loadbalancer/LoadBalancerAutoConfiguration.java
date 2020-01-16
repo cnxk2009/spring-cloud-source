@@ -53,10 +53,13 @@ public class LoadBalancerAutoConfiguration {
     @Autowired(required = false)
     private List<RestTemplate> restTemplates = Collections.emptyList();
 
+    //将LoadBalancerInterceptorConfig初始化的RestTemplateCustomizer
+    //实现该接口后，当所有单例 bean 都初始化完成以后， 容器会回调该接口的方法 afterSingletonsInstantiated
     @Bean
     public SmartInitializingSingleton loadBalancedRestTemplateInitializerDeprecated(
             final ObjectProvider<List<RestTemplateCustomizer>> restTemplateCustomizers) {
         return () -> restTemplateCustomizers.ifAvailable(customizers -> {
+            //对所有的restTemplates定制用RestTemplateCustomizer
             for (RestTemplate restTemplate : LoadBalancerAutoConfiguration.this.restTemplates) {
                 for (RestTemplateCustomizer customizer : customizers) {
                     customizer.customize(restTemplate);
@@ -85,7 +88,7 @@ public class LoadBalancerAutoConfiguration {
                 LoadBalancerRequestFactory requestFactory) {
             return new LoadBalancerInterceptor(loadBalancerClient, requestFactory);
         }
-        //初始化RestTemplate
+        //初始化RestTemplateCustomizer
         @Bean
         @ConditionalOnMissingBean
         public RestTemplateCustomizer restTemplateCustomizer(
@@ -93,8 +96,9 @@ public class LoadBalancerAutoConfiguration {
             return restTemplate -> {
                 List<ClientHttpRequestInterceptor> list = new ArrayList<>(
                         restTemplate.getInterceptors());
-                //在restTemplate拦截器列表中增加loadBalancerInterceptor
+                //在restTemplate拦截器列表中增加上面的loadBalancerInterceptor
                 list.add(loadBalancerInterceptor);
+                //在restTemplate调用接口的时候会增加一个拦截器
                 restTemplate.setInterceptors(list);
             };
         }

@@ -20,7 +20,8 @@
 	<modules>
 	    <module>spring-cloud-eureka-source</module>
         <module>spring-cloud-service-source</module>
-        <module>org-spring-cloud-ribbon-source</module>
+        <module>spring-cloud-ribbon-feign-hystrix-source</module>
+        <module>spring-cloud-ribbon-feign-hystrix-source</module>
     </modules>
     <packaging>pom</packaging>
 
