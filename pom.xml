@@ -22,6 +22,7 @@
         <module>spring-cloud-service-source</module>
         <module>spring-cloud-ribbon-feign-hystrix-source</module>
         <module>spring-cloud-ribbon-feign-hystrix-source</module>
+        <module>spring-cloud-zuul-source</module>
     </modules>
     <packaging>pom</packaging>
 
