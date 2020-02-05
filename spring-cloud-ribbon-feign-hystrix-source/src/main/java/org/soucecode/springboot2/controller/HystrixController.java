@@ -20,6 +20,7 @@ public class HystrixController {
 
     @HystrixCommand(fallbackMethod = "userFallback",
             groupKey = "userGroup",
+            commandKey = "hystrixtest",
             threadPoolKey = "userThreadPool",
             threadPoolProperties = {
                     @HystrixProperty(name="coreSize",value ="2"),

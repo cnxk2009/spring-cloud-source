@@ -15,7 +15,6 @@
  */
 package com.netflix.hystrix;
 
-import com.netflix.hystrix.HystrixCircuitBreaker.NoOpCircuitBreaker;
 import com.netflix.hystrix.HystrixCommandProperties.ExecutionIsolationStrategy;
 import com.netflix.hystrix.exception.ExceptionNotWrappedByHystrix;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
@@ -164,6 +163,7 @@ import java.util.concurrent.atomic.AtomicReference;
         this.properties = initCommandProperties(this.commandKey, propertiesStrategy, commandPropertiesDefaults);
         this.threadPoolKey = initThreadPoolKey(threadPoolKey, this.commandGroup, this.properties.executionIsolationThreadPoolKeyOverride().get());
         this.metrics = initMetrics(metrics, this.commandGroup, this.threadPoolKey, this.commandKey, this.properties);
+        //初始化断路器
         this.circuitBreaker = initCircuitBreaker(this.properties.circuitBreakerEnabled().get(), circuitBreaker, this.commandGroup, this.commandKey, this.properties, this.metrics);
         //线程池初始化
         this.threadPool = initThreadPool(threadPool, this.threadPoolKey, threadPoolPropertiesDefaults);
@@ -255,7 +255,7 @@ import java.util.concurrent.atomic.AtomicReference;
                 return fromConstructor;
             }
         } else {
-            return new NoOpCircuitBreaker();
+            return new HystrixCircuitBreaker.NoOpCircuitBreaker();
         }
     }
 
@@ -599,6 +599,8 @@ import java.util.concurrent.atomic.AtomicReference;
                     eventNotifier.markEvent(HystrixEventType.SUCCESS, commandKey);
                     executionResult = executionResult.addEvent((int) latency, HystrixEventType.SUCCESS);
                     eventNotifier.markCommandExecution(getCommandKey(), properties.executionIsolationStrategy().get(), (int) latency, executionResult.getOrderedList());
+                    //半开状态关闭熔断器
+                    //metrics 统计HealthCounts
                     circuitBreaker.markSuccess();
                 }
             }
@@ -645,7 +647,7 @@ import java.util.concurrent.atomic.AtomicReference;
             //线程隔离的逻辑
             execution = executeCommandWithSpecifiedIsolation(_cmd);
         }
-
+        //当正常逻辑executeCommandWithSpecifiedIsolation调用完成之后执行doOnCompleted
         return execution.doOnNext(markEmits)
                 .doOnCompleted(markOnCompleted)
                 .onErrorResumeNext(handleFallback)
